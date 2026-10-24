@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Ahmed Sattar Jabbar" />
+
+<meta name="date" content="2026-10-15" />
+
+<title>Empirical Econometric Applications of the Local Manifold Dispersion Test (LMDT)</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Empirical Econometric Applications of the
+Local Manifold Dispersion Test (LMDT)</h1>
+<h4 class="author">Ahmed Sattar Jabbar</h4>
+<h4 class="date">2026-10-15</h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The <strong>Local Manifold Dispersion Test (LMDT)</strong> provides a
+distribution-free, geometry-aware diagnostic test for conditional
+heteroskedasticity in linear and non-linear regression models.</p>
+<p>Standard classical tests—such as Breusch–Pagan (1979) and White
+(1980)—presume that conditional variance heterogeneity manifests along
+linear or smooth polynomial trajectories within Euclidean space. When
+regressors lie on nonlinear manifolds, curved attractors, or
+topologically non-trivial spaces, classical tests suffer from antipodal
+cancellation and catastrophic power collapse.</p>
+<p>LMDT overcomes these limitations by evaluating the graph-spectral
+Dirichlet energy of robust log-dispersion residuals over a self-tuning
+<span class="math inline">\(k\)</span>-nearest neighbors normalized
+graph Laplacian.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(LMDT)</span></code></pre></div>
+<hr />
+</div>
+<div id="vignette-1-sp-500-index-options-the-volatility-smile-manifold" class="section level2">
+<h2>Vignette 1: S&amp;P 500 Index Options &amp; The Volatility Smile
+Manifold</h2>
+<p>In quantitative equity options markets, the implied volatility
+surface represents an intrinsic 2D curved manifold embedded in moneyness
+(<span class="math inline">\(M = K/S\)</span>) and time-to-maturity
+(<span class="math inline">\(\tau\)</span>). The typical volatility
+smile creates a parabolic pricing error variance structure that
+classical Euclidean tests miss due to symmetry cancellation.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(LMDT)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># Simulate n = 600 S&amp;P 500 option contracts along a parabolic smile manifold</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>n_opt <span class="ot">&lt;-</span> <span class="dv">600</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>moneyness <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_opt, <span class="fl">0.75</span>, <span class="fl">1.25</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>maturity  <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_opt, <span class="fl">0.08</span>, <span class="fl">2.50</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>X_options <span class="ot">&lt;-</span> <span class="fu">cbind</span>(moneyness, maturity)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co"># True pricing error variance follows parabolic smile along moneyness</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>vol_scale <span class="ot">&lt;-</span> <span class="fl">0.05</span> <span class="sc">+</span> <span class="fl">0.45</span> <span class="sc">*</span> (moneyness <span class="sc">-</span> <span class="fl">1.0</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>pricing_residuals <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_opt, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> vol_scale)</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co"># Execute LMDT vs classical tests</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>lmdt_options <span class="ot">&lt;-</span> <span class="fu">lmdt_test</span>(<span class="at">x =</span> X_options, <span class="at">residuals =</span> pricing_residuals, <span class="at">k =</span> <span class="dv">12</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="fu">print</span>(lmdt_options)</span></code></pre></div>
+<hr />
+</div>
+<div id="vignette-2-spatial-lag-hedonic-housing-price-gradients" class="section level2">
+<h2>Vignette 2: Spatial Lag Hedonic Housing Price Gradients</h2>
+<p>Urban real estate values exhibit spatial dependence constrained by
+natural riverfronts and transit arteries. Distance concentration and
+non-Euclidean city topography induce localized variance clusters across
+latitude and longitude coordinates.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Simulate n = 800 metropolitan housing transactions</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>n_house <span class="ot">&lt;-</span> <span class="dv">800</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_house, <span class="fl">40.60</span>, <span class="fl">40.85</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_house, <span class="sc">-</span><span class="fl">74.05</span>, <span class="sc">-</span><span class="fl">73.85</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># Non-spherical error clustering along riverfront bend</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>river_dist <span class="ot">&lt;-</span> <span class="fu">abs</span>(lat <span class="sc">-</span> <span class="fl">40.72</span> <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> (lon <span class="sc">+</span> <span class="fl">73.95</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>cluster_sd <span class="ot">&lt;-</span> <span class="fl">0.15</span> <span class="sc">+</span> <span class="fl">0.60</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>river_dist <span class="sc">/</span> <span class="fl">0.02</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>fit_house_resids <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_house, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> cluster_sd)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co"># Run LMDT with spatial nearest neighbors</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>lmdt_house <span class="ot">&lt;-</span> <span class="fu">lmdt_test</span>(<span class="at">x =</span> <span class="fu">cbind</span>(lat, lon), <span class="at">residuals =</span> fit_house_resids, <span class="at">k =</span> <span class="dv">14</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="fu">print</span>(lmdt_house)</span></code></pre></div>
+<hr />
+</div>
+<div id="vignette-3-high-dimensional-macroeconomic-factor-forecasting-p-120" class="section level2">
+<h2>Vignette 3: High-Dimensional Macroeconomic Factor Forecasting (<span class="math inline">\(p = 120\)</span>)</h2>
+<p>Macroeconomic forecasting suites (e.g., FRED-MD) typically feature
+<span class="math inline">\(p &gt; 100\)</span> series subject to dense
+cross-sectional correlation. In high dimensions, classical White tests
+suffer combinatorial parameter explosion and fail completely. LMDT
+deploys an automated Gavish–Donoho Optimal Hard Thresholding (OHT)
+singular-value filter to isolate the underlying latent factor
+manifold.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Simulate n = 350 monthly observations of p = 120 macroeconomic indicators</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">303</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>n_macro <span class="ot">&lt;-</span> <span class="dv">350</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>p_macro <span class="ot">&lt;-</span> <span class="dv">120</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># Latent d = 3 factor manifold + isotropic Gaussian observation noise</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>Z_factors <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_macro <span class="sc">*</span> <span class="dv">3</span>), n_macro, <span class="dv">3</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>Loadings  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> p_macro), <span class="dv">3</span>, p_macro)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>X_macro   <span class="ot">&lt;-</span> Z_factors <span class="sc">%*%</span> Loadings <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_macro <span class="sc">*</span> p_macro, <span class="at">sd =</span> <span class="fl">0.5</span>), n_macro, p_macro)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co"># Volatility regime shift along first principal macro factor</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>macro_resids <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_macro, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.2</span> <span class="sc">+</span> <span class="fl">0.8</span> <span class="sc">*</span> (Z_factors[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="fl">0.5</span>))</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co"># Denoised High-Dimensional LMDT</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>lmdt_macro <span class="ot">&lt;-</span> <span class="fu">lmdt_test</span>(<span class="at">x =</span> X_macro, <span class="at">residuals =</span> macro_resids, <span class="at">denoise =</span> <span class="st">&quot;pca&quot;</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="fu">print</span>(lmdt_macro)</span></code></pre></div>
+<hr />
+</div>
+<div id="vignette-4-limit-order-book-lob-intraday-flash-crash-early-warning" class="section level2">
+<h2>Vignette 4: Limit Order Book (LOB) Intraday Flash Crash Early
+Warning</h2>
+<p>High-frequency limit order books experience extreme localized
+volatility regimes prior to liquidity evaporation. Using 250ms
+order-flow and queue imbalance metrics, LMDT detects early
+microstructural variance anomalies across the non-Euclidean order
+attractor manifold.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Simulate n = 1,200 consecutive 250ms LOB snapshots</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">404</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>n_lob <span class="ot">&lt;-</span> <span class="dv">1200</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>p_lob <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># Latent 3D order flow attractor manifold</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>t_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4</span> <span class="sc">*</span> pi, <span class="at">length.out =</span> n_lob)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>Z_lob <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">sin</span>(t_seq), <span class="fu">cos</span>(t_seq), t_seq <span class="sc">/</span> (<span class="dv">4</span> <span class="sc">*</span> pi))</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>Q_orth <span class="ot">&lt;-</span> <span class="fu">qr.Q</span>(<span class="fu">qr</span>(<span class="fu">matrix</span>(<span class="fu">rnorm</span>(p_lob <span class="sc">*</span> p_lob), p_lob, p_lob)))</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>X_lob <span class="ot">&lt;-</span> Z_lob <span class="sc">%*%</span> <span class="fu">t</span>(Q_orth[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_lob <span class="sc">*</span> p_lob, <span class="at">sd =</span> <span class="fl">0.05</span>), n_lob, p_lob)</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co"># Liquidity evaporation regime spike</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>lob_sd <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(t_seq <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">*</span> pi, <span class="fl">1.8</span>, <span class="fl">0.4</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>lob_resids <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n_lob, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> lob_sd)</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>lmdt_lob <span class="ot">&lt;-</span> <span class="fu">lmdt_test</span>(<span class="at">x =</span> X_lob, <span class="at">residuals =</span> lob_resids, <span class="at">k =</span> <span class="dv">15</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="fu">print</span>(lmdt_lob)</span></code></pre></div>
+<hr />
+</div>
+<div id="diagnostic-plotting-method" class="section level2">
+<h2>Diagnostic Plotting Method</h2>
+<p>The package provides a built-in <code>plot.lmdt()</code> S3 method
+producing a 4-panel diagnostic graphic: 1. Residual log-dispersion
+against fitted values. 2. Degree-normalized graph Laplacian eigenvalue
+spectrum. 3. Spatial nearest-neighbor connection graph. 4. Standardized
+<span class="math inline">\(Z\)</span>-statistic against the standard
+Gaussian null density.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Plot diagnostic panels</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">plot</span>(lmdt_options)</span></code></pre></div>
+<hr />
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Jabbar, A. S. (2026).</strong> <em>Spectral Inference on
+Manifolds: The Local Manifold Dispersion Test (LMDT) in Non-Euclidean
+and High-Dimensional Regimes.</em> Working Paper / Research Monograph,
+Mustansiriyah University.</li>
+<li><strong>Breusch, T. S., &amp; Pagan, A. R. (1979).</strong> A simple
+test for heteroscedasticity and random coefficient variation.
+<em>Econometrica</em>, 47(5), 1287–1294.</li>
+<li><strong>White, H. (1980).</strong> A heteroskedasticity-consistent
+covariance matrix estimator and a direct test for heteroskedasticity.
+<em>Econometrica</em>, 48(4), 817–838.</li>
+<li><strong>de Jong, P. (1987).</strong> A central limit theorem for
+generalized quadratic forms. <em>Probability Theory and Related
+Fields</em>, 75(2), 261–277.</li>
+<li><strong>Gavish, M., &amp; Donoho, D. L. (2014).</strong> The optimal
+hard threshold for singular values is <span class="math inline">\(4/\sqrt{3}\)</span>. <em>IEEE Transactions on
+Information Theory</em>, 60(8), 5040–5053.</li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

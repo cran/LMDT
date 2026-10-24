@@ -1,0 +1,157 @@
+---
+title: "Empirical Econometric Applications of the Local Manifold Dispersion Test (LMDT)"
+author: "Ahmed Sattar Jabbar"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Empirical Econometric Applications of the Local Manifold Dispersion Test (LMDT)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+## Introduction
+
+The **Local Manifold Dispersion Test (LMDT)** provides a distribution-free, geometry-aware diagnostic test for conditional heteroskedasticity in linear and non-linear regression models. 
+
+Standard classical tests—such as Breusch–Pagan (1979) and White (1980)—presume that conditional variance heterogeneity manifests along linear or smooth polynomial trajectories within Euclidean space. When regressors lie on nonlinear manifolds, curved attractors, or topologically non-trivial spaces, classical tests suffer from antipodal cancellation and catastrophic power collapse. 
+
+LMDT overcomes these limitations by evaluating the graph-spectral Dirichlet energy of robust log-dispersion residuals over a self-tuning $k$-nearest neighbors normalized graph Laplacian.
+
+```r
+library(LMDT)
+```
+
+---
+
+## Vignette 1: S&P 500 Index Options & The Volatility Smile Manifold
+
+In quantitative equity options markets, the implied volatility surface represents an intrinsic 2D curved manifold embedded in moneyness ($M = K/S$) and time-to-maturity ($\tau$). The typical volatility smile creates a parabolic pricing error variance structure that classical Euclidean tests miss due to symmetry cancellation.
+
+```{r vignette1, eval = FALSE}
+library(LMDT)
+
+# Simulate n = 600 S&P 500 option contracts along a parabolic smile manifold
+set.seed(42)
+n_opt <- 600
+moneyness <- runif(n_opt, 0.75, 1.25)
+maturity  <- runif(n_opt, 0.08, 2.50)
+X_options <- cbind(moneyness, maturity)
+
+# True pricing error variance follows parabolic smile along moneyness
+vol_scale <- 0.05 + 0.45 * (moneyness - 1.0)^2
+pricing_residuals <- rnorm(n_opt, mean = 0, sd = vol_scale)
+
+# Execute LMDT vs classical tests
+lmdt_options <- lmdt_test(x = X_options, residuals = pricing_residuals, k = 12)
+print(lmdt_options)
+```
+
+---
+
+## Vignette 2: Spatial Lag Hedonic Housing Price Gradients
+
+Urban real estate values exhibit spatial dependence constrained by natural riverfronts and transit arteries. Distance concentration and non-Euclidean city topography induce localized variance clusters across latitude and longitude coordinates.
+
+```{r vignette2, eval = FALSE}
+# Simulate n = 800 metropolitan housing transactions
+set.seed(101)
+n_house <- 800
+lat <- runif(n_house, 40.60, 40.85)
+lon <- runif(n_house, -74.05, -73.85)
+
+# Non-spherical error clustering along riverfront bend
+river_dist <- abs(lat - 40.72 + 0.5 * (lon + 73.95)^2)
+cluster_sd <- 0.15 + 0.60 * exp(-river_dist / 0.02)
+fit_house_resids <- rnorm(n_house, mean = 0, sd = cluster_sd)
+
+# Run LMDT with spatial nearest neighbors
+lmdt_house <- lmdt_test(x = cbind(lat, lon), residuals = fit_house_resids, k = 14)
+print(lmdt_house)
+```
+
+---
+
+## Vignette 3: High-Dimensional Macroeconomic Factor Forecasting ($p = 120$)
+
+Macroeconomic forecasting suites (e.g., FRED-MD) typically feature $p > 100$ series subject to dense cross-sectional correlation. In high dimensions, classical White tests suffer combinatorial parameter explosion and fail completely. LMDT deploys an automated Gavish–Donoho Optimal Hard Thresholding (OHT) singular-value filter to isolate the underlying latent factor manifold.
+
+```{r vignette3, eval = FALSE}
+# Simulate n = 350 monthly observations of p = 120 macroeconomic indicators
+set.seed(303)
+n_macro <- 350
+p_macro <- 120
+
+# Latent d = 3 factor manifold + isotropic Gaussian observation noise
+Z_factors <- matrix(rnorm(n_macro * 3), n_macro, 3)
+Loadings  <- matrix(rnorm(3 * p_macro), 3, p_macro)
+X_macro   <- Z_factors %*% Loadings + matrix(rnorm(n_macro * p_macro, sd = 0.5), n_macro, p_macro)
+
+# Volatility regime shift along first principal macro factor
+macro_resids <- rnorm(n_macro, mean = 0, sd = 0.2 + 0.8 * (Z_factors[, 1] > 0.5))
+
+# Denoised High-Dimensional LMDT
+lmdt_macro <- lmdt_test(x = X_macro, residuals = macro_resids, denoise = "pca")
+print(lmdt_macro)
+```
+
+---
+
+## Vignette 4: Limit Order Book (LOB) Intraday Flash Crash Early Warning
+
+High-frequency limit order books experience extreme localized volatility regimes prior to liquidity evaporation. Using 250ms order-flow and queue imbalance metrics, LMDT detects early microstructural variance anomalies across the non-Euclidean order attractor manifold.
+
+```{r vignette4, eval = FALSE}
+# Simulate n = 1,200 consecutive 250ms LOB snapshots
+set.seed(404)
+n_lob <- 1200
+p_lob <- 20
+
+# Latent 3D order flow attractor manifold
+t_seq <- seq(0, 4 * pi, length.out = n_lob)
+Z_lob <- cbind(sin(t_seq), cos(t_seq), t_seq / (4 * pi))
+Q_orth <- qr.Q(qr(matrix(rnorm(p_lob * p_lob), p_lob, p_lob)))
+X_lob <- Z_lob %*% t(Q_orth[, 1:3]) + matrix(rnorm(n_lob * p_lob, sd = 0.05), n_lob, p_lob)
+
+# Liquidity evaporation regime spike
+lob_sd <- ifelse(t_seq > 3 * pi, 1.8, 0.4)
+lob_resids <- rnorm(n_lob, mean = 0, sd = lob_sd)
+
+lmdt_lob <- lmdt_test(x = X_lob, residuals = lob_resids, k = 15)
+print(lmdt_lob)
+```
+
+---
+
+## Diagnostic Plotting Method
+
+The package provides a built-in `plot.lmdt()` S3 method producing a 4-panel diagnostic graphic:
+1. Residual log-dispersion against fitted values.
+2. Degree-normalized graph Laplacian eigenvalue spectrum.
+3. Spatial nearest-neighbor connection graph.
+4. Standardized $Z$-statistic against the standard Gaussian null density.
+
+```{r plot_demo, eval = FALSE}
+# Plot diagnostic panels
+plot(lmdt_options)
+```
+
+---
+
+## References
+
+1. **Jabbar, A. S. (2026).** *Spectral Inference on Manifolds: The Local Manifold Dispersion Test (LMDT) in Non-Euclidean and High-Dimensional Regimes.* Working Paper / Research Monograph, Mustansiriyah University.
+2. **Breusch, T. S., & Pagan, A. R. (1979).** A simple test for heteroscedasticity and random coefficient variation. *Econometrica*, 47(5), 1287–1294.
+3. **White, H. (1980).** A heteroskedasticity-consistent covariance matrix estimator and a direct test for heteroskedasticity. *Econometrica*, 48(4), 817–838.
+4. **de Jong, P. (1987).** A central limit theorem for generalized quadratic forms. *Probability Theory and Related Fields*, 75(2), 261–277.
+5. **Gavish, M., & Donoho, D. L. (2014).** The optimal hard threshold for singular values is $4/\sqrt{3}$. *IEEE Transactions on Information Theory*, 60(8), 5040–5053.
